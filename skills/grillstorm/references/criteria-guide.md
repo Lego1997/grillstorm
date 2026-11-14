@@ -28,7 +28,7 @@ Ask the user what they would see on the page, then write that down.
 - "It should be balanced."
   - Check: The strongest objection to the main recommendation is stated in terms its proponents would accept, and is answered.
 - "Two pages at most."
-  - Check: The draft is at most 850 words. Page counts cannot be checked in a text file, so convert them to a word count and tell the user the number you chose.
+  - Check: The draft is at most 850 words, not counting link addresses. Page counts cannot be checked in a text file, so convert them to a word count (400 to 450 words a page is a fair rate for plain text), say whether links and headings count, and tell the user the number you chose.
 
 ## What a check looks like in plan.md
 
@@ -43,8 +43,14 @@ The "Origin" line lets the user see later where each standard came from, and tel
 - **reference**: something the benchmark already does and the user confirmed they want
 - **user**: something the user asked for that is not about the benchmark, such as a length limit or a scope rule
 - **user change**: something the user would do differently from the benchmark today
-- **suggested add**: proposed by the planning session and accepted by the user
-- **research**: taken from a source found in research and accepted by the user
+- **suggested add**: proposed by the planning session, from its own judgment or the light web check, and accepted by the user
+- **research**: taken from a source found in the deep research done when there is no reference, and accepted by the user
+
+If a check has two origins, name the one that tells you what to expect in calibration.
+
+## Checks about invented facts
+
+The plan tells the worker to flag a fact it cannot source instead of filling it in. Word a "nothing invented" check so that a flagged gap passes and an unsourced claim fails. The worker lists the flags for the human when the loop stops. If the evaluator may have no web access, have the worker keep a source log in the workspace (each claim, its source, the supporting quote) and point the check at that file.
 
 ## Coverage
 

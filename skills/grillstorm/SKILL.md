@@ -21,11 +21,12 @@ You do not write the deliverable in this session. Your output is a `plan.md` and
 The user chose to plan with you instead of alone, so bring ideas of your own and press on theirs. People judge a concrete draft far more accurately than they can describe what they want from a blank page, so the pattern throughout is: do your homework, put a strawman in front of them, then go through the decisions that are still open.
 
 - **Find out before you ask.** Anything the working directory, the web or the user's own message already answers is not a question for the user.
-- **Show the whole draft, then grill what is contested.** Present a strawman (the frame, the structure, the criteria set) in one piece and ask what is wrong with it. Then take individual questions only on items where you are unsure, where the user objected, or where the item came from you and not from them. Do not walk the user through every item one by one: a session that asks fifty questions has cost more than it saves. Fifteen to twenty is a reasonable ceiling for the whole session.
-- **One decision per question, with your recommendation.** For a choice, say which answer you would pick and why, so the user can accept it in a word or argue. For a fact only the user has (a deadline, who the readers are), just ask. If your environment has a structured question tool (Claude Code's AskUserQuestion, for example), use it; otherwise ask in chat. Questions that do not depend on each other can go out together, three or four at a time. Where one decision shapes another, settle the upstream one first.
+- **Show the whole draft, then grill what is contested.** Present a strawman (the frame, the structure, the criteria set) in one piece and ask what is wrong with it. Then take individual questions only on items where you are unsure, where the user objected, or where the item came from you and not from them. Do not walk the user through every item one by one: a session that asks fifty separate questions has cost more than it saves. Aim for the whole session to take the user six to ten replies.
+- **One decision per question, with your recommendation.** For a choice, say which answer you would pick and why, so the user can accept it in a word or argue. For a fact only the user has (a deadline, who the readers are), just ask. If your environment has a structured question tool (Claude Code's AskUserQuestion, for example), use it; otherwise ask in chat. Open questions that do not depend on each other can go out together, three or four at a time; yes-or-no confirmations on a draft you are showing can all go in the same message as the draft. Where one decision shapes another, settle the upstream one first.
+- **Combine steps when you can.** The workflow below is an order of work, not a list of separate conversations. If the next step does not depend on the user's reply to this one, put both in the same message.
 - **Do not accept adjectives.** "Clear", "rigorous" and "insightful" cannot be judged by anyone else. Ask what the user would see on the page. When they struggle, show two short contrasting versions and ask which is closer.
 - **Disagree when you have a reason.** Say what you would do differently and why. The user's taste still decides.
-- **Treat "go with your recommendation" as a yes, and write it down.** List every decision the user deferred to you in section 8 of the plan. Those are your taste, not theirs, and the user should be able to find them when the first draft comes back.
+- **Treat "go with your recommendation" as a yes, and write it down.** That holds for sign-off too. List every decision the user deferred to you in section 8 of the plan, most consequential first. Those are your taste, not theirs, and the user should be able to find them when the first draft comes back. The exception is substance: if the user defers on what the deliverable should conclude or propose, your recommendation is to leave it to the worker and have the user review it at the round 1 pause.
 - **Stop when the answers stop mattering.** If no answer to a remaining question would change the plan, record your assumption and move on.
 - **Use the user's language** in conversation. Write `plan.md` in the language the worker and evaluator should work in, which is usually the language of the deliverable; ask if it is not obvious.
 
@@ -33,7 +34,7 @@ The user chose to plan with you instead of alone, so bring ideas of your own and
 
 ### 1. Orient, before asking anything
 
-Read the request, then look through the working directory for:
+Read `assets/plan-template.md` first, so you know what the finished plan has to hold and what it already settles (for example, how missing facts are handled). Then read the request and look through the working directory for:
 
 - past deliverables of the same kind, especially ones that look finished and polished
 - briefs, terms of reference, templates and style guides
@@ -48,7 +49,7 @@ Keep a short list of candidate references with their paths.
 
 Draft the frame from what you found, show it, and ask only about the parts you could not settle yourself:
 
-- what the deliverable is, and its format, length and language
+- what the deliverable is, and its format, length and language. Where a reference exists, default these to the reference's.
 - who reads it, what they already know, and what they will decide or do afterwards
 - why it is being written now, and the deadline
 - the inputs it must draw on, whether the worker may find further sources, and what must not be invented
@@ -63,7 +64,7 @@ The criteria should come from the user's own taste wherever that is possible. Th
 
 **If the user has a reference they are happy with, do (a) and then (b).**
 
-**(a) The user's own best work.** Ask which past deliverable of this kind they are most satisfied with, and whether there is any other reference they want to match. Show the candidates you found in step 1 in the same question ("I found these three; is one of them your best, or is it something else?"). Skip the question if the user has already answered it. Then read the chosen reference closely and work out what makes it good. Put your reading to the user as a short list of specific observations they can confirm or correct in one reply: "Every section opens with its conclusion. Each option has exactly one strength and one weakness." Then ask what they would change about it today. What they like becomes criteria the reference passes. What they would change becomes criteria the reference itself fails, which is how the new work gets better than the old.
+**(a) The user's own best work.** Ask which past deliverable of this kind they are most satisfied with, and whether there is any other reference they want to match. Show the candidates you found in step 1 in the same question ("I found these three; is one of them your best, or is it something else?"). Skip the question if the user has already answered it, and if the directory holds one obvious candidate, say you are taking it as the reference and go straight on. Then read the chosen reference closely and work out what makes it good. Put your reading to the user as a short list of specific observations they can confirm or correct in one reply: "Every section opens with its conclusion. Each option has exactly one strength and one weakness." Then ask what they would change about it today. What they like becomes criteria the reference passes. What they would change becomes criteria the reference itself fails, which is how the new work gets better than the old.
 
 **(b) Your own suggested improvements.** Propose improvements the reference does not already show, from your own judgment and a brief web check of what good practice asks of this kind of deliverable for this kind of reader. Offer only suggestions specific enough to become a check, each with one line on why it would help, and let the user accept or reject each. Keep the web check light: the user's taste is the anchor, and research only fills gaps. If it turns up nothing specific, say so and move on.
 
@@ -93,7 +94,7 @@ Read `references/criteria-guide.md` before drafting these. It has the tests a cr
 
 **Benchmark comparison.** Three to five dimensions on which the evaluator reads the draft side by side with the benchmark and says which is stronger. This catches the quality that cannot be broken into checks: a draft can pass every check and still be worse than the user's best work. The benchmark is usually about a different topic, so word each dimension about craft (how tight the argument is, how usable the recommendations are), not subject matter. Leave this part out if there is no benchmark.
 
-Draft the full set yourself from what steps 2 to 4 produced, and mark where each item came from. Show the set to the user in one piece and ask what is wrong or missing. Items that restate something the user already confirmed need no further question. Items that came from you or from research need an explicit yes or no.
+Draft the full set yourself from what steps 2 to 4 produced, and mark where each item came from. Show the set to the user in one piece, each check with its "Check" line, since that line is often where the real standard sits, and ask what is wrong or missing. Items that restate something the user already confirmed need no further question. Items that came from you or from research need an explicit yes or no.
 
 ### 6. Calibrate the criteria
 
@@ -102,12 +103,12 @@ Criteria are instructions to an evaluator, and instructions can be wrong. Test t
 **Run the binary checks against the benchmark.** If you can start a sub-agent, give a fresh one only the list of checks and the benchmark file, tell it to treat the benchmark as the draft, and ask for PASS or FAIL with a quote for each check. Otherwise apply the checks yourself, as literally as you can. What to expect depends on where each check came from:
 
 - from the reference: the benchmark should pass
-- a change the user wants, or a suggested add: the benchmark should fail
+- a change the user wants, a suggested add, or a standard taken from research: the benchmark should fail
 - specific to this task (its inputs, its length limit, its scope): cannot be tested on a benchmark about something else. Skip these.
 
 A pass that happens only because the benchmark has nothing for the check to apply to tells you nothing. Any other surprise means the check is worded wrongly or does not capture what the user meant. Reword it, and show the user the new wording, since it replaces something they approved.
 
-**Ask of each check whether an average draft would pass it.** Picture a competent writer working from sections 1 and 2 of the plan who has not seen the structure or the criteria. Do not write that draft; reason about it. If most checks would pass, the set is not doing any work. Tighten it until it separates the user's standard from average.
+**Ask of each check whether an average draft would pass it.** Picture a competent writer who has the frame and the agreed structure but has not seen the criteria. Do not write that draft; reason about it. Checks that only confirm the structure was followed will pass, and that is fine as long as they are not most of the set. If nearly everything would pass, the set is not doing any work. Tighten it until it separates the user's standard from average.
 
 With no benchmark, do the second test only.
 

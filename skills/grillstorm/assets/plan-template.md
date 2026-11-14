@@ -127,11 +127,12 @@ Give this to the evaluator word for word.
 
 [With no benchmark, the result line is `CHECKS: [passed]/[total] · RESULT: DONE` or `REVISE`, and the sentence after it reads "The result is DONE only if every check passes."]
 
-## 8. Assumptions, deferred decisions and open questions
+## 8. Assumptions, deferred decisions, open questions and calibration notes
 
 - Assumptions: [what the planning session assumed without asking]
-- Deferred decisions: [what the user was asked and left to the planning session's recommendation. The round 1 pause is the moment to revisit these.]
+- Deferred decisions: [what the user was asked and left to the planning session's recommendation, most consequential first. The round 1 pause is the moment to revisit these.]
 - Open questions: [what is still unknown, and who resolves it]
+- Calibration notes: [checks that were reworded after calibration, and checks that could not be tested before round 1]
 
 ## 9. Change log
 
