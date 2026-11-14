@@ -1,0 +1,14 @@
+{
+  "name": "grillstorm",
+  "description": "GrillStorm: plan knowledge work with success criteria an independent evaluator can apply",
+  "owner": {
+    "name": "Lego1997"
+  },
+  "plugins": [
+    {
+      "name": "grillstorm",
+      "source": "./",
+      "description": "Co-brainstorm a plan.md with a deliverable structure and evaluator-ready success criteria, then get an initialization prompt for a draft, evaluate, revise loop."
+    }
+  ]
+}

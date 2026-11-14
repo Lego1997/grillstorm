@@ -1,0 +1,10 @@
+{
+  "name": "grillstorm",
+  "description": "Co-brainstorm a plan.md with a deliverable structure and evaluator-ready success criteria, so a draft, evaluate, revise loop works on knowledge work that no test can verify.",
+  "version": "0.1.0",
+  "author": {
+    "name": "Lego1997"
+  },
+  "repository": "https://github.com/Lego1997/grillstorm",
+  "keywords": ["planning", "brainstorming", "success-criteria", "knowledge-work", "loop-engineering"]
+}
