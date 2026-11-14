@@ -7,10 +7,10 @@ The evaluator is a fresh agent. It has the plan, the draft, the benchmark and th
 A check is ready when it passes all five.
 
 - **Observable.** It is about something on the page, not about the writer's intent or the reader's feelings. "The reader feels confident" fails this test. "Each recommendation names who acts and by when" passes.
-- **Atomic.** It tests one thing. If the statement has an "and", ask whether a draft could pass one half and fail the other. If it could, split it.
+- **One verdict.** It asks for a single pass or fail. A check may have several parts when they belong to one standard and the "Check" line lists them ("names the actor, the action and a time frame"). Split a check only when the parts are separate standards that the user would care about separately.
 - **Quotable.** The evaluator can point at a passage that proves pass or fail. For checks about something being absent ("no unexplained acronyms"), the evaluator proves a fail by quoting an instance and a pass by stating what it searched for.
 - **Discriminating.** A competent but generic first draft would plausibly fail it. A check that everything passes costs evaluator attention and tells the loop nothing.
-- **Self-contained.** It can be applied with only the materials the evaluator has. If it depends on something the user said in conversation, write that into the check.
+- **Self-contained.** It can be applied with only what the evaluator can reach. If it depends on something the user said in conversation, write that into the check. If it depends on opening web links, remember that the evaluator may have no web access, in which case the check fails every round; where you can, have it rely on files in the workspace instead.
 
 ## Turning vague wishes into checks
 
@@ -27,6 +27,8 @@ Ask the user what they would see on the page, then write that down.
   - Check: No sentence could be deleted without losing information. The evaluator quotes any that could.
 - "It should be balanced."
   - Check: The strongest objection to the main recommendation is stated in terms its proponents would accept, and is answered.
+- "Two pages at most."
+  - Check: The draft is at most 850 words. Page counts cannot be checked in a text file, so convert them to a word count and tell the user the number you chose.
 
 ## What a check looks like in plan.md
 
@@ -34,7 +36,15 @@ Ask the user what they would see on the page, then write that down.
   - Check: List each recommendation and mark which of the three parts are present. Fail if any part is missing from any recommendation.
   - Origin: reference
 
-The "Check" line tells the evaluator how to do the check, so two evaluators would do it the same way. The "Origin" line is one of: reference, user, suggested add, research. It lets the user see later where each standard came from, and it tells you which checks the benchmark is expected to fail during calibration (the suggested adds).
+The "Check" line tells the evaluator how to do the check, so two evaluators would do it the same way.
+
+The "Origin" line lets the user see later where each standard came from, and tells you what to expect in calibration. It is one of:
+
+- **reference**: something the benchmark already does and the user confirmed they want
+- **user**: something the user asked for that is not about the benchmark, such as a length limit or a scope rule
+- **user change**: something the user would do differently from the benchmark today
+- **suggested add**: proposed by the planning session and accepted by the user
+- **research**: taken from a source found in research and accepted by the user
 
 ## Coverage
 
@@ -63,11 +73,12 @@ Example:
 
 ## When there is no benchmark
 
-Leave the comparison out and say so in the plan. Compensate by making the binary checks stricter and by leaning on the generic-draft test: if an average draft would pass most of the checks, they need tightening.
+Leave the comparison out and say so in the plan. Compensate by making the binary checks stricter and by leaning on the average-draft test: if an average draft would pass most of the checks, they need tightening.
 
 ## Calibration results and what to do with them
 
-- **The benchmark fails a check that was derived from it.** The wording is stricter than what the benchmark actually does, or the evaluator read it differently from how the user meant it. Rewrite the check.
-- **The benchmark passes a suggested add.** The reference already does this. Change the origin to "reference"; nothing else is needed.
-- **Two evaluations of the same text disagree on a check.** The check leaves too much to judgment. Add detail to the "Check" line or split the check.
-- **Everything passes on a generic draft.** The checks are too easy. Ask the user what separates their best work from an acceptable piece, and write that down.
+- **The benchmark fails a check of origin "reference".** The wording is stricter than what the benchmark actually does, or the evaluator read it differently from how the user meant it. Reword the check and show the user the new wording.
+- **The benchmark passes a suggested add or a user change.** If it passes because it really does the thing, the reference already meets this standard: change the origin to "reference". If it passes only because there was nothing for the check to apply to (a check about explaining technical terms, run on a benchmark that has none), the result tells you nothing; leave the check as it is.
+- **A check is specific to this task.** Checks about this task's inputs, length or scope cannot be tested on a benchmark about something else. Skip them and note in section 8 that round 1 is their first real test.
+- **You ran the checks twice and the two runs disagree.** The check leaves too much to judgment. Add detail to the "Check" line or split the check.
+- **An average draft would pass nearly everything.** The checks are too easy. Ask the user what separates their best work from an acceptable piece, and write that down.

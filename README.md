@@ -15,11 +15,11 @@ GrillStorm builds the missing check first. In one planning conversation, you and
 
 ## How the conversation goes
 
-The model proposes, then grills. It reads your workspace first, puts a strawman in front of you, and then takes the open decisions one at a time, each with its own recommended answer.
+The model proposes, then grills. It reads your working directory first, puts a strawman in front of you, and then takes the contested decisions one at a time, each with its own recommended answer. It does not search connected sources such as a document drive or mailbox unless you point it there.
 
 The criteria come from your taste wherever possible, in this order:
 
-1. **Your best past work.** The model asks which past deliverable you are most satisfied with, looks through your workspace for candidates, and works out with you what makes the chosen one good.
+1. **Your best past work.** The model asks which past deliverable you are most satisfied with, looks through your working directory for candidates, and works out with you what makes the chosen one good.
 2. **Suggested improvements.** The model proposes improvements beyond the reference, from its own judgment and a light web check. You accept or reject each.
 3. **Deep research.** Only if you have no reference at all, the model researches what good looks like for this kind of deliverable and reader, proposes criteria with sources, and goes through them with you.
 
@@ -31,7 +31,7 @@ Before you sign off, the model calibrates the criteria by running them against t
 - An initialization prompt, printed in chat. Paste it into a new session or another tool. It tells the worker to:
   - draft to the agreed structure
   - have a fresh, independent evaluator judge each draft against the plan
-  - pause once after round 1, so you can confirm the evaluator is judging the right things
+  - pause once after round 1, so you can confirm the evaluator is judging the right things and that you stand behind the position the draft takes
   - then run on its own until every check passes and the draft wins or ties the comparison, or until round 5
 
 Only you can change the structure and the criteria. The worker may propose changes but cannot make them.
