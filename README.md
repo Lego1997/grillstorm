@@ -1,6 +1,6 @@
-# GrillStorm
+# grillstorm
 
-GrillStorm is an agent skill for AI coding tools (Claude Code, Codex, Cursor and others that read the open Agent Skills format). It runs a planning conversation with you before any drafting starts, and hands you a `plan.md` and a short initialization prompt. You paste that prompt into a fresh session or another tool, where a draft, independent-evaluator, revise loop does the work.
+grillstorm is an agent skill for AI coding tools (Claude Code, Codex, Cursor and others that read the open Agent Skills format). It runs a planning conversation with you before any drafting starts, and hands you a `plan.md` and a short initialization prompt. You paste that prompt into a fresh session or another tool, where a draft, independent-evaluator, revise loop does the work.
 
 Version 0.1.0. [MIT License](LICENSE).
 
@@ -8,7 +8,7 @@ Version 0.1.0. [MIT License](LICENSE).
 
 Agent loops work well when the outcome can be verified: the agent writes code, a test fails, the agent fixes it. Reports, memos, policy briefs, strategy documents and slide decks have no test. What "good" means is in your head, so a loop with nothing to check against settles on output that is plausible and generic.
 
-GrillStorm builds the missing check first. In one planning conversation, you and the model agree on:
+grillstorm builds the missing check first. In one planning conversation, you and the model agree on:
 
 1. **A structure** for the deliverable, written strictly as bullets and sub-bullets.
 2. **Success criteria** that an independent evaluator sub-agent can apply to a draft, without having seen the planning conversation.
@@ -145,9 +145,9 @@ Inspired by Matt Pocock's [grill-me skill](https://github.com/mattpocock/skills)
 
 ## 中文简介
 
-GrillStorm 是用于 Claude Code、Codex、Cursor 等 AI 工具的 agent skill。它要解决的问题是：代码可以靠测试验证，适合让模型循环迭代；但报告、备忘录、政策简报这类知识工作没有测试可跑，循环无从判断好坏，产出容易流于空洞。
+grillstorm 是用于 Claude Code、Codex、Cursor 等 AI 工具的 agent skill。它要解决的问题是：代码可以靠测试验证，适合让模型循环迭代；但报告、备忘录、政策简报这类知识工作没有测试可跑，循环无从判断好坏，产出容易流于空洞。
 
-GrillStorm 在动笔之前先和你进行一轮结构化讨论，产出一份 `plan.md`，包含：
+grillstorm 在动笔之前先和你进行一轮结构化讨论，产出一份 `plan.md`，包含：
 
 - 交付物的结构（严格使用层级要点）
 - 成功标准：可由独立评估 sub-agent 逐条判定的二元检查项（每条必须引用原文为证据），以及与你最满意的过往作品在几个维度上的并排比较

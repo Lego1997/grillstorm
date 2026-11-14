@@ -3,13 +3,13 @@ name: grillstorm
 description: Co-brainstorm with and grill the user to turn a fuzzy knowledge-work task (report, memo, policy brief, strategy doc, proposal, slide deck, essay, research synthesis, analysis, or any deliverable whose quality cannot be checked by running a test) into a plan.md holding an agreed deliverable structure and evaluator-ready success criteria, then hand back an initialization prompt that starts a draft, independent-evaluator, revise loop in a fresh session or another AI tool. Use this skill whenever the user is about to start a substantial deliverable whose quality depends on judgment or taste, asks to plan, scope or brainstorm one, asks what "good" would look like, wants success criteria or a rubric for a piece of work, or says "grillstorm" or "grill me" about something they need to produce, even if they never ask for a plan. Not for coding tasks that tests can verify.
 ---
 
-# GrillStorm
+# grillstorm
 
 ## Why this exists
 
 An agent loop works when something can tell the agent it is wrong: a test fails, the code does not compile. Most knowledge work has no such signal. What "good" means lives in the user's head, so a loop with nothing to check against converges on output that is plausible and generic.
 
-GrillStorm builds the missing check before any drafting starts. With the user, you get their taste out of their head and onto the page in a form that a fresh evaluator, who has seen none of this conversation, can apply to a draft. That takes two things:
+grillstorm builds the missing check before any drafting starts. With the user, you get their taste out of their head and onto the page in a form that a fresh evaluator, who has seen none of this conversation, can apply to a draft. That takes two things:
 
 - a **structure** for the deliverable, so the worker knows what to build
 - **success criteria**, so an independent evaluator can say whether what was built is good
