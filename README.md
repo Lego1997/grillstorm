@@ -1,44 +1,68 @@
 # grillstorm
 
-grillstorm is an agent skill for AI coding tools (Claude Code, Codex, Cursor and others that read the open Agent Skills format). It runs a planning conversation with you before any drafting starts, and hands you a `plan.md` and a short initialization prompt. You paste that prompt into a fresh session or another tool, where a draft, independent-evaluator, revise loop does the work.
+grillstorm is an agent skill for AI coding tools (Claude Code, Codex, Cursor and others that read the open Agent Skills format). It runs a planning conversation with you before any drafting starts, then hands you a `plan.md` and a short initialization prompt. You paste that prompt into a fresh session or another tool, where a draft, independent-evaluator, revise loop does the work.
 
 Version 0.1.0. [MIT License](LICENSE).
+
+The following diagram shows the two phases and the handoff between them.
+
+```mermaid
+flowchart LR
+    A["Planning session"] --> B["plan.md"]
+    A --> C["Initialization prompt"]
+    C -->|paste into| D["Fresh session"]
+    B -->|read by| D
+    D --> E["Draft-evaluate-revise loop"]
+```
 
 ## The problem
 
 Agent loops work well when the outcome can be verified: the agent writes code, a test fails, the agent fixes it. Reports, memos, policy briefs, strategy documents and slide decks have no test. What "good" means is in your head, so a loop with nothing to check against settles on output that is plausible and generic.
 
-grillstorm builds the missing check first. In one planning conversation, you and the model agree on:
+grillstorm builds the missing check first. In one planning conversation, you and the model agree on a structure for the deliverable and success criteria that an independent evaluator can apply to a draft without having seen the planning conversation. The plan then moves to a fresh session where the draft-evaluate-revise loop does the work.
 
-1. **A structure** for the deliverable, written strictly as bullets and sub-bullets.
-2. **Success criteria** that an independent evaluator sub-agent can apply to a draft, without having seen the planning conversation.
+## The planning session
 
-The criteria have two parts: binary checks (each backed by a quoted passage from the draft) and, when you have past work to compare against, a side-by-side comparison on a few dimensions of craft. Together they give the loop something concrete to test against.
+The diagram below shows the full planning conversation, from your first message to the handoff. The whole conversation aims for six to ten replies from you.
 
-## What a session looks like
+```mermaid
+flowchart TD
+    A["User describes the task"] --> B["Read working directory for<br/>past work, briefs, source material"]
+    B --> C["Frame the task:<br/>audience, purpose, scope, inputs"]
+    C --> D{"User has a reference<br/>they are happy with?"}
+    D -- Yes --> E["Read reference closely,<br/>note what makes it good"]
+    E --> F["Suggest improvements from<br/>judgment and web check;<br/>user accepts or rejects each"]
+    D -- No --> G["Deep web research for<br/>examples and standards"]
+    F --> H["Agree the structure<br/>as bullets and sub-bullets"]
+    G --> H
+    H --> I["Draft success criteria:<br/>binary checks + comparison"]
+    I --> J["Calibrate criteria"]
+    J --> K["Write plan.md<br/>and get sign-off"]
+    K --> L["Print initialization prompt"]
+```
 
-1. **The model does its homework.** It reads your working directory for past deliverables, briefs, style guides, feedback on earlier work and source material. It stays inside the directory and does not search connected sources such as a document drive or mailbox unless you point it there.
+1. **The model does its homework.** It reads your working directory for past deliverables, briefs, style guides, feedback on earlier work and source material. It stays inside the directory and does not search connected sources such as a document drive or mailbox unless you point it there. It then drafts a frame for the task and asks you only about the parts it could not settle from the directory.
 
-2. **It proposes, then grills.** It puts a strawman in front of you: a frame for the task, a draft structure, a draft set of criteria. It asks what is wrong with it. Individual questions come only where you disagree, where something is unknown, or where a decision came from the model rather than from you. Criteria draw first on your own best past work, then on improvements the model suggests (from its judgment and a light web check) that you accept or reject one by one. Deep web research fills in only when you have no reference at all.
+2. **It finds the standard.** If you have a past deliverable you are satisfied with, the model reads it closely, works out what makes it good, and puts that reading to you as a short list of observations you can confirm or correct. It then suggests improvements drawn from its own judgment and a brief web check; you accept or reject each one. If you have no reference at all, the model runs a round of deep web research for well-regarded examples, guidance from institutions your audience trusts, and common complaints about this kind of deliverable, then summarizes what it found before proposing anything.
 
-3. **You agree the criteria.** The model calibrates them by running the binary checks against your reference. If your best work fails a check that was derived from it, the check is worded wrongly and gets fixed. If nearly every check would pass an average draft, the set is too easy and gets tightened.
+3. **You agree the structure and criteria.** The model proposes a structure for the deliverable, written strictly as bullets and sub-bullets, and a set of success criteria. It puts these in front of you as a strawman and asks what is wrong. Individual questions come only where you disagree, where something is unknown, or where a decision came from the model rather than from you.
 
-4. **You get `plan.md` and an initialization prompt.** The plan holds the goal, spec, structure, success criteria, benchmark, loop protocol, an evaluator brief and a record of every decision you left to the model. The skill does not decide what the deliverable should conclude or recommend; that is left to you or to the worker. The prompt is a short block of text you paste into a new session or another tool.
+4. **The model calibrates the criteria.** If you have a reference, it runs the binary checks against it: a check derived from the reference should pass, and one that represents a deliberate improvement should fail. Any mismatch means the wording needs fixing. It also checks whether an average draft would pass most of the set. If so, the criteria are too easy and get tightened.
 
-The whole planning conversation aims for six to ten replies from you.
+5. **You get `plan.md` and an initialization prompt.** The plan holds the goal, spec, structure, success criteria, benchmark, loop protocol, an evaluator brief and a record of every decision you left to the model. The skill does not decide what the deliverable should conclude or recommend; that is left to you or to the worker. The prompt is a short block of text you paste into a new session or another tool.
 
 ## How the criteria work
 
 ### Binary checks
 
-Each check is a statement about something observable in the draft that is either true or false. The evaluator must quote the passage that proves its verdict. It cannot wave a check through without evidence.
+Each check is a statement about something observable in the draft that is either true or false. The evaluator must quote the passage that proves its verdict and cannot wave a check through without evidence. Each check also says how to test it, so that two evaluators would apply it the same way.
 
 **Example.** For a policy brief, a check might read:
 
 > **C4. Recommendations are actionable.** Every recommendation names the actor, the action and a time frame.
 > - Check: List each recommendation and mark which of the three parts are present. Fail if any part is missing from any recommendation.
 
-Compare this with "Recommendations are clear and useful", which any draft could claim to pass. The check tells the evaluator exactly what to look for, so two evaluators would reach the same verdict.
+Compare this with "Recommendations are clear and useful", which any draft could claim to pass. The check tells the evaluator exactly what to look for.
 
 ### Benchmark comparison
 
@@ -50,9 +74,20 @@ If you have a past deliverable you are satisfied with, the evaluator reads the n
 
 A draft can pass every binary check and still read worse than your best work overall. The comparison catches that gap. When no reference is available, the loop runs on binary checks alone.
 
-## The loop the initialization prompt starts
+## The loop
 
-When you paste the prompt into a fresh session:
+When you paste the initialization prompt into a fresh session, the following cycle runs.
+
+```mermaid
+flowchart TD
+    A["Worker drafts or revises<br/>to agreed structure"] --> B["Fresh independent evaluator<br/>judges draft against plan"]
+    B --> C{"Round 1?"}
+    C -- Yes --> D["Human confirms evaluator<br/>is judging the right things<br/>and stands behind the position"]
+    D --> E{"DONE, or<br/>round 5 evaluated?"}
+    C -- No --> E
+    E -- No --> A
+    E -- Yes --> F["Worker reports final result,<br/>open gaps, proposed changes"]
+```
 
 1. The worker drafts the deliverable to the agreed structure.
 2. It starts a fresh, independent evaluator sub-agent with the evaluator brief from the plan. The evaluator sees the plan's goal, spec, structure, criteria and benchmark, plus the draft, but nothing from the worker's conversation.
@@ -114,11 +149,11 @@ The skill does not write the deliverable. It stops after handing you the plan an
 
 ## Design choices
 
-**Why binary checks with quoted evidence?** A check like "the writing is clear" lets the evaluator wave it through on impression. Requiring a quote for every verdict forces the evaluator to point at specific text. If it cannot find a passage that proves a check passes, the verdict is FAIL.
+**Why binary checks with quoted evidence?** Without the quote requirement, an evaluator can pass a check on impression. Requiring a quoted passage for every verdict means a check with no supporting text in the draft is a FAIL.
 
-**Why compare against your own best work?** Binary checks test individual properties, but a draft can pass them all and still read worse than your best work overall. Side-by-side comparison on a few dimensions of craft catches quality that the checks miss: coherence, density, how quickly a reader gets to the point.
+**Why compare against your own best work?** Binary checks test individual properties. Side-by-side comparison catches what they miss: coherence, density, how quickly a reader gets to the point.
 
-**Why calibrate against the reference before signing off?** Criteria are instructions to an evaluator, and instructions can be wrong. Running the checks against the benchmark before the loop starts catches wording that is stricter or looser than what you actually meant. A check derived from the reference should pass; one that represents a deliberate improvement should fail.
+**Why calibrate against the reference before signing off?** Criteria are instructions to an evaluator, and instructions can be wrong. Running the checks against the benchmark before the loop starts catches wording that does not match what you actually meant.
 
 **Why not write the deliverable in the same session?** The evaluator has to judge a draft by what is on the page, not by what it heard you explain. A session that has heard all the planning reasoning will be generous with a draft it helped shape. The plan needs a fresh worker and a fresh evaluator.
 
@@ -147,14 +182,16 @@ Inspired by Matt Pocock's [grill-me skill](https://github.com/mattpocock/skills)
 
 grillstorm 是用于 Claude Code、Codex、Cursor 等 AI 工具的 agent skill。它要解决的问题是：代码可以靠测试验证，适合让模型循环迭代；但报告、备忘录、政策简报这类知识工作没有测试可跑，循环无从判断好坏，产出容易流于空洞。
 
-grillstorm 在动笔之前先和你进行一轮结构化讨论，产出一份 `plan.md`，包含：
+grillstorm 在动笔之前先和你进行一轮结构化讨论，产出一份 `plan.md` 和一段初始化提示词。计划包含：
 
 - 交付物的结构（严格使用层级要点）
-- 成功标准：可由独立评估 sub-agent 逐条判定的二元检查项（每条必须引用原文为证据），以及与你最满意的过往作品在几个维度上的并排比较
+- 成功标准：可由独立评估 sub-agent 逐条判定的二元检查项（每条必须引用原文为证据），以及与你的参照作品在几个工艺维度上的并排比较
 
-标准优先取自你自己满意的过往作品，其次是模型提出、由你逐条取舍的改进建议；两者都没有时模型才做深度研究。签字前，模型用过往作品试跑检查项来校准：源自作品的检查项，作品应当通过，否则措辞有误；如果普通初稿也能通过大部分检查项，说明标准太松。
+标准的来源取决于你是否有满意的过往作品。有参照作品时，模型先仔细阅读，提炼出优点让你确认，再提出改进建议（结合自身判断和简要的网络查阅），由你逐条取舍。没有参照作品时，模型先做一轮深度网络研究，找到公认的优秀范例和相关指南，再向你汇报发现、提出标准。模型将结构和标准作为草案完整呈现，问你哪里有问题，只在你有异议、信息未知或决定出自模型时才单独提问。签字前，模型用参照作品试跑检查项来校准：源自作品的检查项应当通过，代表刻意提升的检查项应当不通过；如果普通初稿也能通过大部分检查项，说明标准太松，需要收紧。
 
-讨论结束后你会得到一段初始化提示词，贴到新 session 或其他工具中即可启动"起草 → 独立评估 → 修改"循环。第一轮后暂停一次请你确认评估方向和立场，此后自动运行至全部通过或第 5 轮。只有你可以修改结构、标准和参照作品。你委托模型做的决定记录在计划中，方便事后查阅；交付物的实质主张（结论、建议）留给你或执行者决定，不在规划阶段锁定。
+讨论结束后你会得到一段初始化提示词，贴到新 session 或其他工具中即可启动循环：执行者起草，独立评估者依据计划判定草稿，第一轮后暂停一次请你确认评估方向和草稿立场，此后自动运行至全部通过或第 5 轮评估完成。执行者结束时汇报最终结果、仍未通过的检查项、需要你填补的空缺，以及它建议的标准修改。只有你可以修改结构、标准和参照作品，执行者可以提议但无权自行变更。如果工具无法启动 sub-agent，执行者会在每轮草稿后暂停，交给你在另一个 session 中运行评估。
+
+计划中记录了你委托模型做的每一个决定，方便事后查阅。交付物的实质主张（结论、建议）留给你或执行者决定，不在规划阶段锁定。
 
 注意：该 skill 只读取当前工作目录中的文件，不会主动搜索文档云盘或邮箱，除非你明确指向。
 
