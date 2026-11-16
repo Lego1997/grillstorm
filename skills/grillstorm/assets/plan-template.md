@@ -4,6 +4,7 @@ Notes for the planning session. Delete this block from the finished plan.
 - Keep the section numbers and headings. The initialization prompt and the evaluator brief refer to them.
 - Write every path relative to the folder that holds this file.
 - If there is no benchmark, remove the two passages in section 7 marked (benchmark only), and use the no-benchmark wording given in sections 4b, 5 and 7.
+- If there is no outside evaluator, write "Outside evaluator: none" and delete the sub-bullets under it.
 - Where there is a benchmark, delete the (benchmark only) markers and keep the text.
 - Delete the bracketed no-benchmark instructions either way.
 -->
@@ -78,7 +79,12 @@ The evaluator reads the draft next to the benchmark named in section 5. The draf
 
 - Roles
   - Worker: the session that drafts and revises.
-  - Evaluator: a fresh sub-agent started for each round. It receives the brief in section 7 and nothing else from the worker's conversation: no reasoning, no earlier evaluation reports.
+  - Evaluator: a fresh sub-agent started for each round, on the strongest model available. It receives the brief in section 7 and nothing else from the worker's conversation: no reasoning, no earlier evaluation reports.
+  - Outside evaluator: [none | the tool, for example Codex CLI, and the command that starts it]
+    - A second evaluator from a different model provider. The human agreed on [date] that the plan, the draft and the benchmark may be sent to it.
+    - Each round it receives the same section 7 brief as the main evaluator, and it does not edit anything.
+    - A check passes only if both evaluators pass it. Where they disagree, the round's report lists the check as contested, with the evidence each gave. The same rule applies to each comparison dimension.
+    - If it cannot be reached in a round, the report says so and the round is judged by the main evaluator alone.
   - Human: owns sections 3, 4 and 5.
 - Each round
   - The worker writes or revises the draft at [draft path].
@@ -98,6 +104,9 @@ The evaluator reads the draft next to the benchmark named in section 5. The draf
   - any checks still failing, and why they resisted
   - every gap it flagged in the draft that the human still has to fill
   - any change to the criteria it would propose. It proposes; it does not edit.
+- If the tool can run the loop as a script over sub-agents, as Claude Code workflows do
+  - Run round 1 as one run and the remaining rounds as a second run, because a run cannot stop for human input.
+  - The script, not the worker, reads the evaluator's result and decides whether to stop.
 - If the tool cannot start sub-agents
   - After each draft the worker stops and hands the human the section 7 brief to run in a separate, fresh session. The human pastes the report back.
 

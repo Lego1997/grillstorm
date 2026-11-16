@@ -2,7 +2,7 @@
 
 grillstorm is an agent skill for AI coding tools (Claude Code, Codex, Cursor and others that read the open Agent Skills format). It runs a planning conversation with you before any drafting starts, then hands you a `plan.md` and a short initialization prompt. You paste that prompt into a fresh session or another tool, where a draft, independent-evaluator, revise loop does the work.
 
-Version 0.1.0. [MIT License](LICENSE).
+Version 0.2.0. [MIT License](LICENSE).
 
 The following diagram shows the two phases and the handoff between them.
 
@@ -37,19 +37,22 @@ flowchart TD
     G --> H
     H --> I["Draft success criteria:<br/>binary checks + comparison"]
     I --> J["Calibrate criteria"]
-    J --> K["Write plan.md<br/>and get sign-off"]
+    J --> M["Choose the evaluator"]
+    M --> K["Write plan.md<br/>and get sign-off"]
     K --> L["Print initialization prompt"]
 ```
 
 1. **The model does its homework.** It reads your working directory for past deliverables, briefs, style guides, feedback on earlier work and source material. It stays inside the directory and does not search connected sources such as a document drive or mailbox unless you point it there. It then drafts a frame for the task and asks you only about the parts it could not settle from the directory.
 
-2. **It finds the standard.** If you have a past deliverable you are satisfied with, the model reads it closely, works out what makes it good, and puts that reading to you as a short list of observations you can confirm or correct. It then suggests improvements drawn from its own judgment and a brief web check; you accept or reject each one. If you have no reference at all, the model runs a round of deep web research for well-regarded examples, guidance from institutions your audience trusts, and common complaints about this kind of deliverable, then summarizes what it found before proposing anything.
+2. **It finds the standard.** If you have a past deliverable you are satisfied with, the model reads it closely, works out what makes it good, and puts that reading to you as a short list of observations you can confirm or correct. It then suggests improvements drawn from its own judgment and a brief web check; you accept or reject each one. If you have no reference at all, the model runs a round of deep web research (in Claude Code, through the bundled `/deep-research` workflow) for well-regarded examples, guidance from institutions your audience trusts, and common complaints about this kind of deliverable, then summarizes what it found before proposing anything.
 
 3. **You agree the structure and criteria.** The model proposes a structure for the deliverable, written strictly as bullets and sub-bullets, and a set of success criteria. It puts these in front of you as a strawman and asks what is wrong. Individual questions come only where you disagree, where something is unknown, or where a decision came from the model rather than from you.
 
 4. **The model calibrates the criteria.** If you have a reference, it runs the binary checks against it: a check derived from the reference should pass, and one that represents a deliberate improvement should fail. Any mismatch means the wording needs fixing. It also checks whether an average draft would pass most of the set. If so, the criteria are too easy and get tightened.
 
-5. **You get `plan.md` and an initialization prompt.** The plan holds the goal, spec, structure, success criteria, benchmark, loop protocol, an evaluator brief and a record of every decision you left to the model. The skill does not decide what the deliverable should conclude or recommend; that is left to you or to the worker. The prompt is a short block of text you paste into a new session or another tool.
+5. **You choose the evaluator.** By default one fresh sub-agent judges each draft, on the strongest model available. If you have another provider's agent installed, such as Codex CLI alongside Claude Code or the reverse, the model offers to add it as a second, outside evaluator. It asks first, because this sends your plan, draft and benchmark to that provider.
+
+6. **You get `plan.md` and an initialization prompt.** The plan holds the goal, spec, structure, success criteria, benchmark, loop protocol, an evaluator brief and a record of every decision you left to the model. The skill does not decide what the deliverable should conclude or recommend; that is left to you or to the worker. The prompt is a short block of text you paste into a new session or another tool. It comes in two versions: a workflow version for Claude Code and a general version for everything else.
 
 ## How the criteria work
 
@@ -98,6 +101,22 @@ flowchart TD
 Only you can change the structure, the criteria and the benchmark. The worker may propose changes but cannot make them.
 
 If the tool cannot start sub-agents, the worker pauses after each draft and gives you the evaluator brief to run in a separate session.
+
+### An outside evaluator
+
+A judge from the same model family as the worker tends to share its blind spots. If you agreed to an outside evaluator during planning, it receives the same brief each round, and a check passes only if both evaluators pass it. Checks they disagree on are reported as contested, with the evidence each gave. If the outside evaluator cannot be reached in a round, the report says so and the main evaluator judges alone.
+
+### In Claude Code: the loop as a workflow
+
+Claude Code can run a task as a [dynamic workflow](https://code.claude.com/docs/en/workflows.md): a script that starts the sub-agents, holds the loop and decides when to stop. The workflow version of the initialization prompt opens with the keyword `ultracode`, which asks Claude Code to write and run such a script from the loop protocol in your plan. This changes three things:
+
+- The script, not the worker, reads the evaluator's verdicts and decides whether to stop.
+- The evaluator returns its verdicts as structured data, one entry per check.
+- A workflow run cannot stop for your input, so the loop is two runs: round 1, then your confirmation, then rounds 2 to 5.
+
+Paste the prompt at the Claude Code prompt yourself. The keyword does not count when it arrives through another agent or a scheduled task. Workflows are available on paid plans; on Pro, turn them on in `/config` first. A full loop of five rounds is about ten agents with one evaluator.
+
+Other tools, including Codex, Cursor, Copilot CLI and Gemini CLI, can start sub-agents but do not run a script over them, so they use the general version of the prompt, where the worker runs the loop itself.
 
 ## Install
 
@@ -155,11 +174,13 @@ The skill does not write the deliverable. It stops after handing you the plan an
 
 **Why calibrate against the reference before signing off?** Criteria are instructions to an evaluator, and instructions can be wrong. Running the checks against the benchmark before the loop starts catches wording that does not match what you actually meant.
 
+**Why one evaluator, and why offer one from another provider?** One strong evaluator is enough; more copies of the same model add cost without adding independence. A different provider's model is independent in a way a second copy is not, which is why it is the only second evaluator on offer.
+
 **Why not write the deliverable in the same session?** The evaluator has to judge a draft by what is on the page, not by what it heard you explain. A session that has heard all the planning reasoning will be generous with a draft it helped shape. The plan needs a fresh worker and a fresh evaluator.
 
 ## Status
 
-The skill has been dry-run three times with simulated users: twice with a user who had a past brief as reference, once with a user who had no reference. Those runs produced complete plans and initialization prompts and led to two rounds of revisions to the skill's wording. It has not yet been used by a real person on a real deliverable. The evaluation loop that the initialization prompt starts has not been run end to end, and the latest wording changes have not been re-run. Treat it as an early draft.
+The skill has been dry-run three times with simulated users: twice with a user who had a past brief as reference, once with a user who had no reference. Those runs produced complete plans and initialization prompts and led to two rounds of revisions to the skill's wording. It has not yet been used by a real person on a real deliverable. The evaluation loop that the initialization prompt starts has not been run end to end, and the latest wording changes have not been re-run. The workflow version of the prompt, the outside evaluator and the use of `/deep-research` were added in 0.2.0 and have not been run at all. Treat it as an early draft.
 
 ## Repo layout
 
@@ -191,10 +212,14 @@ grillstorm 在动笔之前先和你进行一轮结构化讨论，产出一份 `p
 
 讨论结束后你会得到一段初始化提示词，贴到新 session 或其他工具中即可启动循环：执行者起草，独立评估者依据计划判定草稿，第一轮后暂停一次请你确认评估方向和草稿立场，此后自动运行至全部通过或第 5 轮评估完成。执行者结束时汇报最终结果、仍未通过的检查项、需要你填补的空缺，以及它建议的标准修改。只有你可以修改结构、标准和参照作品，执行者可以提议但无权自行变更。如果工具无法启动 sub-agent，执行者会在每轮草稿后暂停，交给你在另一个 session 中运行评估。
 
+评估者默认只有一个：每轮新启动的独立 sub-agent，使用当前工具中最强的模型。如果你还装有另一家厂商的 agent（例如在 Claude Code 之外装有 Codex CLI，或反过来），模型会征求你的同意后把它加为第二个“外部评估者”；两者都判定通过才算通过，意见不一致的检查项会标为有争议。这样做会把计划、草稿和参照作品发送给那家厂商，所以必须先经你同意。
+
+在 Claude Code 中，初始化提示词以关键词 `ultracode` 开头，让循环以 workflow 脚本的方式运行：由脚本而不是执行者读取评估结果并决定何时停止。workflow 运行中不能等待用户输入，因此分两次运行：第一轮，然后等你确认，再运行第 2 至 5 轮。请亲自在 Claude Code 的输入框粘贴这段提示词。其他工具使用通用版提示词。没有参照作品时，Claude Code 中的深度研究通过内置的 `/deep-research` workflow 完成。
+
 计划中记录了你委托模型做的每一个决定，方便事后查阅。交付物的实质主张（结论、建议）留给你或执行者决定，不在规划阶段锁定。
 
 注意：该 skill 只读取当前工作目录中的文件，不会主动搜索文档云盘或邮箱，除非你明确指向。
 
-当前状态：版本 0.1.0，已用模拟用户干跑三次（两次有参考作品，一次没有），并据此修订了两轮措辞。尚未经真实用户在真实任务上使用，评估循环未完整跑通，最新措辞改动未重新测试。请视为早期草稿。
+当前状态：版本 0.2.0，已用模拟用户干跑三次（两次有参考作品，一次没有），并据此修订了两轮措辞。尚未经真实用户在真实任务上使用，评估循环未完整跑通，最新措辞改动未重新测试。0.2.0 新增的 workflow 版提示词、外部评估者和 `/deep-research` 尚未实际运行过。请视为早期草稿。
 
 [MIT License](LICENSE).

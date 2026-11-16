@@ -70,7 +70,7 @@ The criteria should come from the user's own taste wherever that is possible. Th
 
 **If the user has no reference, do (c).**
 
-**(c) Deep research.** Run a round of web research before proposing anything. Use a deep-research skill or sub-agents if your environment has them. Look for:
+**(c) Deep research.** Run a round of web research before proposing anything. In Claude Code, use the bundled `/deep-research` workflow, which fans out searches, cross-checks the sources and returns a cited report. Elsewhere, use a deep-research skill or sub-agents if your environment has them. Look for:
 
 - well-regarded examples of this kind of deliverable that you can open and read
 - guidance from the institutions or people this audience trusts
@@ -112,7 +112,27 @@ A pass that happens only because the benchmark has nothing for the check to appl
 
 With no benchmark, do the second test only.
 
-### 7. Write plan.md and get sign-off
+### 7. Choose the evaluator
+
+The loop is only as good as its judge, so settle who judges before writing the plan. Ask in the same message as another step; this should not cost the user a reply of its own.
+
+**The main evaluator** is one fresh sub-agent per round, run on the strongest model available in the tool where the loop will run. One strong evaluator is enough. Adding more of the same model adds cost without adding independence.
+
+**An outside evaluator** is optional: a second evaluator from a different model provider. A judge from the same model family as the worker tends to share its blind spots, and a different provider's strongest model does not. To offer one:
+
+- Find out whether another provider's agent is installed, for example with `command -v codex claude gemini`, or ask the user.
+- If one is there, offer to use it, and say plainly that this sends the plan, the draft and the benchmark to that provider. Use it only if the user says yes.
+- Record the tool and how it is started in section 6 of the plan.
+
+How to start one, run from the folder that holds the plan so that the brief's relative paths resolve. Flags change between releases, so check each tool's `--help` before writing the command into the plan:
+
+- From Claude Code to Codex: `codex exec "<brief>"`, which runs read-only by default. If the user has the Codex plugin for Claude Code, `/codex:rescue` also hands a free-text task to Codex. `/codex:review` does not fit: it reviews code changes and takes no instructions.
+- From Codex or another tool to Claude: `claude -p "<brief>"`.
+- To Gemini: `gemini -p "<brief>"`.
+
+Also ask where the loop will run: in Claude Code, or in another tool. The answer decides which initialization prompt you hand over in step 9.
+
+### 8. Write plan.md and get sign-off
 
 Fill in `assets/plan-template.md` and save it as `plan.md` in the working directory, or where the user prefers. If a `plan.md` is already there, do not overwrite it; ask, or use a more specific name.
 
@@ -122,9 +142,9 @@ Fill in `assets/plan-template.md` and save it as `plan.md` in the working direct
 
 Show the user the finished plan and ask for explicit sign-off on sections 3, 4 and 5. Those are the sections the worker will not be allowed to change.
 
-### 8. Hand over the initialization prompt
+### 9. Hand over the initialization prompt
 
-Fill in `assets/init-prompt-template.md` and print it in a code block as the last thing in your reply, so the user can copy it straight into a new session or another tool. Tell them in a sentence or two what happens when they run it: the worker drafts, an independent evaluator judges the draft against the plan, the loop pauses once after round 1 so they can confirm that the evaluator is judging the right things and that the draft's position is one they stand behind, and then it runs on its own until everything passes or it reaches round 5.
+`assets/init-prompt-template.md` holds two versions. If the loop will run in Claude Code, use the workflow version: it starts with the keyword `ultracode`, which makes Claude Code run the loop as a workflow script, so the round count, the stop condition and the evaluator's isolation are enforced by code instead of left to the worker. For any other tool, use the general version. Fill in the one that applies and print it in a code block as the last thing in your reply, so the user can copy it straight into a new session or another tool. Mention in one line that the other version exists. Tell them in a sentence or two what happens when they run it: the worker drafts, an independent evaluator judges the draft against the plan, the loop pauses once after round 1 so they can confirm that the evaluator is judging the right things and that the draft's position is one they stand behind, and then it runs on its own until everything passes or it reaches round 5.
 
 Then stop. Do not start drafting the deliverable unless the user asks you to run the loop in this session.
 

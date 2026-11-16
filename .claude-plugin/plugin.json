@@ -1,7 +1,7 @@
 {
   "name": "grillstorm",
   "description": "Co-brainstorm a plan.md with a deliverable structure and evaluator-ready success criteria, so a draft, evaluate, revise loop works on knowledge work that no test can verify.",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "author": {
     "name": "Lego1997"
   },
