@@ -180,7 +180,7 @@ The skill does not write the deliverable. It stops after handing you the plan an
 
 ## Status
 
-The skill has been dry-run three times with simulated users: twice with a user who had a past brief as reference, once with a user who had no reference. Those runs produced complete plans and initialization prompts and led to two rounds of revisions to the skill's wording. It has not yet been used by a real person on a real deliverable. The evaluation loop that the initialization prompt starts has not been run end to end, and the latest wording changes have not been re-run. The workflow version of the prompt, the outside evaluator and the use of `/deep-research` were added in 0.2.0 and have not been run at all. Treat it as an early draft.
+Version 0.2.0. Three dry runs with simulated users (two with a reference, one without) led to two rounds of wording revisions. On 25–26 November 2026 the author used it on a real deliverable: planning a 10-minute seminar talk. The planning session produced a plan.md with binary checks calibrated against a reference benchmark. The evaluation loop ran end to end for five rounds, each with a fresh Claude evaluator and Codex CLI as outside evaluator. Every check passed by round 4; in round 5 the outside evaluator contested two items, which the author settled at the stop. The `/deep-research` path for users with no reference has not been run. Early version.
 
 ## Repo layout
 
@@ -220,6 +220,6 @@ grillstorm 在动笔之前先和你进行一轮结构化讨论，产出一份 `p
 
 注意：该 skill 只读取当前工作目录中的文件，不会主动搜索文档云盘或邮箱，除非你明确指向。
 
-当前状态：版本 0.2.0，已用模拟用户干跑三次（两次有参考作品，一次没有），并据此修订了两轮措辞。尚未经真实用户在真实任务上使用，评估循环未完整跑通，最新措辞改动未重新测试。0.2.0 新增的 workflow 版提示词、外部评估者和 `/deep-research` 尚未实际运行过。请视为早期草稿。
+当前状态：版本 0.2.0。用模拟用户干跑三次（两次有参考作品，一次没有），据此修订了两轮措辞。2026 年 11 月 25–26 日，作者首次将其用于真实交付物：规划一场 10 分钟的研讨会发言。规划会话生成了 plan.md，含针对参考基准校准的二元通过/不通过检查项。评估循环完整跑通五轮，每轮由全新的 Claude 评估者评判，Codex CLI 担任外部评估者。第四轮所有检查项通过；第五轮外部评估者对两项提出异议，由作者在终止时裁定。循环在第五轮上限处停止。`/deep-research` 路径（面向无参考作品的用户）尚未运行。仍为早期版本。
 
 [MIT License](LICENSE).
